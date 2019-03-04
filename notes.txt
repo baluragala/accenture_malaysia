@@ -5,7 +5,7 @@ Breaks : Morning Tea (15 min) / Lunch (45 min) / Evening Tea (15 min)
 Program Type: Workshop ( mostly handson )
 Prerequisite: HTML, CSS and JS Basics 
 collab edit url : http://collabedit.com/h9hc8
-git url : 
+git url : https://github.com/baluragala/accenture_malaysia.git
 
 Important Points:
 - Ask questions
