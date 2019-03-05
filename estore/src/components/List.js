@@ -5,12 +5,8 @@ class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: [
-        { id: 1, title: "Iphone", price: 1700, stock: 10 },
-        { id: 2, title: "S10", price: 1500, stock: 0 },
-        { id: 3, title: "Pixel", price: 1200, stock: 20 },
-        { id: 4, title: "Note", price: 1000, stock: 30 }
-      ]
+      products: [],
+      isLoading: false
     };
 
     this.handleOnSell = this.handleOnSell.bind(this);
@@ -20,6 +16,16 @@ class List extends React.Component {
     //   products.push({ id: 5, title: "NEW Note", price: 1000, stock: 30 });
     //   this.setState({ products });
     // }, 5000);
+  }
+
+  async componentDidMount() {
+    try {
+      this.setState({ isLoading: true });
+      let products = await fetch("http://localhost:4000/products").then(r =>
+        r.json()
+      );
+      this.setState({ products, isLoading: false });
+    } catch (err) {}
   }
 
   handleOnSell(id) {
@@ -32,17 +38,14 @@ class List extends React.Component {
 
   _renderProdcts() {
     return this.state.products.map(
-      p =>
-        p.stock > 0 && (
-          <Item key={p.id} product={p} onSell={this.handleOnSell} />
-        )
+      p => p.stock > 0 && <Item key={p.id} onSell={this.handleOnSell} />
     );
   }
   render() {
     return (
       <div>
         <h2>Products</h2>
-        {this._renderProdcts()}
+        {this.state.isLoading ? <p>Loading...</p> : this._renderProdcts()}
       </div>
     );
   }

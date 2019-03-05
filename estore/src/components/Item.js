@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 class Item extends React.PureComponent {
   constructor(props) {
@@ -40,5 +41,20 @@ class Item extends React.PureComponent {
     );
   }
 }
+
+Item.defaultProps = {
+  product: { id: 0, title: "N/A", price: -1, stock: -1 },
+  onSell: () => {}
+};
+
+Item.propTypes = {
+  product: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    stock: PropTypes.number.isRequired,
+    price: PropTypes.number.isRequired
+  }),
+  onSell: PropTypes.func.isRequired
+};
 
 export default Item;
