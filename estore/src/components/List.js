@@ -38,7 +38,10 @@ class List extends React.Component {
 
   _renderProdcts() {
     return this.state.products.map(
-      p => p.stock > 0 && <Item key={p.id} onSell={this.handleOnSell} />
+      p =>
+        p.stock > 0 && (
+          <Item key={p.id} product={p} onSell={this.handleOnSell} />
+        )
     );
   }
   render() {

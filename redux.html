@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Redux</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js"></script>
+  </head>
+  <body>
+    <button onclick="store.dispatch(incActionCreator(2))">INC2</button>
+    <span id="res">0</span>
+    <button onclick="store.dispatch(decActionCreator(2))">DEC2</button>
+    <button onclick="store.dispatch(incActionCreator(5))">INC5</button>
+    <button onclick="store.dispatch(decActionCreator(5))">DEC5</button>
+    <script>
+      function incActionCreator(by) {
+        return {
+          type: "INC",
+          by
+        };
+      }
+
+      function decActionCreator(by) {
+        return {
+          type: "DEC",
+          by
+        };
+      }
+
+      function getTimeActionCreator() {
+        return {
+          type: "GET_TIME"
+        };
+      }
+
+      function getNumberActionCreator() {
+        return {
+          type: "GET_NUMBER"
+        };
+      }
+
+      function counterReducer(state = { counter: 0 }, action) {
+        console.log("counterReducer", action);
+        switch (action.type) {
+          case "INC":
+            return { counter: state.counter + action.by };
+          case "DEC":
+            return { counter: state.counter - action.by };
+          default:
+            return state;
+        }
+      }
+
+      function utilReducer(
+        state = { time: new Date().toTimeString(), number: Math.random() },
+        action
+      ) {
+        console.log("utilReducer", action);
+        switch (action.type) {
+          case "GET_TIME":
+            return {
+              ...state,
+              time: new Date().toTimeString()
+            };
+          case "GET_NUMER":
+            return {
+              ...state,
+              number: Math.random()
+            };
+          default:
+            return state;
+        }
+      }
+
+      const rootReducer = Redux.combineReducers({
+        counterState: counterReducer,
+        utilState: utilReducer
+      });
+
+      const store = Redux.createStore(rootReducer);
+      store.subscribe(() => console.log(store.getState()));
+      store.subscribe(() => {
+        document.querySelector(
+          "#res"
+        ).innerText = store.getState().counterState.counter;
+      });
+    </script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
+import { Link } from "react-router-dom";
 class Item extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -33,7 +33,9 @@ class Item extends React.PureComponent {
     return (
       <div>
         <h3>
-          {title}({stock})
+          <Link to={`/products/${id}`}>
+            {title}({stock})
+          </Link>
         </h3>
         <p>{price}</p>
         <button onClick={() => onSell(id)}>Sell</button>
