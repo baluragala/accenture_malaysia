@@ -1,43 +1,29 @@
 import React from "react";
 import Item from "./Item";
-
+import { connect } from "react-redux";
+import { getProductsAsyncActionCreator } from "../actionCreators/product";
 class List extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      products: [],
-      isLoading: false
-    };
 
     this.handleOnSell = this.handleOnSell.bind(this);
-
-    // setTimeout(() => {
-    //   let products = [...this.state.products];
-    //   products.push({ id: 5, title: "NEW Note", price: 1000, stock: 30 });
-    //   this.setState({ products });
-    // }, 5000);
   }
 
   async componentDidMount() {
     try {
-      this.setState({ isLoading: true });
-      let products = await fetch("http://localhost:4000/products").then(r =>
-        r.json()
-      );
-      this.setState({ products, isLoading: false });
+      this.props.dispatch(getProductsAsyncActionCreator());
     } catch (err) {}
   }
 
   handleOnSell(id) {
-    let products = this.state.products;
-    let index = products.findIndex(p => p.id === id);
-    products[index].stock--;
-    products[index] = { ...products[index] };
-    this.setState({ products });
+    // let products = this.props.products;
+    // let index = products.findIndex(p => p.id === id);
+    // products[index].stock--;
+    // products[index] = { ...products[index] };
   }
 
   _renderProdcts() {
-    return this.state.products.map(
+    return this.props.products.map(
       p =>
         p.stock > 0 && (
           <Item key={p.id} product={p} onSell={this.handleOnSell} />
@@ -48,9 +34,19 @@ class List extends React.Component {
     return (
       <div>
         <h2>Products</h2>
-        {this.state.isLoading ? <p>Loading...</p> : this._renderProdcts()}
+        {this.props.isLoading ? <p>Loading...</p> : this._renderProdcts()}
       </div>
     );
   }
 }
-export default List;
+
+function mapStateToProps(state) {
+  return {
+    products: state.productState.products,
+    isLoading: state.productState.isLoading
+  };
+}
+
+const connectedComponent = connect(mapStateToProps);
+
+export default connectedComponent(List);

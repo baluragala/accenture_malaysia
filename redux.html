@@ -6,85 +6,52 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Redux</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.3.0/redux-thunk.js"></script>
   </head>
   <body>
-    <button onclick="store.dispatch(incActionCreator(2))">INC2</button>
-    <span id="res">0</span>
-    <button onclick="store.dispatch(decActionCreator(2))">DEC2</button>
-    <button onclick="store.dispatch(incActionCreator(5))">INC5</button>
-    <button onclick="store.dispatch(decActionCreator(5))">DEC5</button>
+    <button onclick="store.dispatch(getProductsAsyncActionCreator())">
+      GET PRODUCTS
+    </button>
     <script>
-      function incActionCreator(by) {
+      function getProductsActionCreator() {
         return {
-          type: "INC",
-          by
+          type: "GET_PRODUCTS"
         };
       }
 
-      function decActionCreator(by) {
-        return {
-          type: "DEC",
-          by
+      function getProductsAsyncActionCreator() {
+        return async function(dispatch) {
+          dispatch(getProductsActionCreator());
+          let products = await fetch("http://localhost:4000/products").then(r =>
+            r.json()
+          );
+          dispatch({ type: "GET_PRODUCTS_SUCCESS", products });
         };
       }
 
-      function getTimeActionCreator() {
-        return {
-          type: "GET_TIME"
-        };
-      }
-
-      function getNumberActionCreator() {
-        return {
-          type: "GET_NUMBER"
-        };
-      }
-
-      function counterReducer(state = { counter: 0 }, action) {
-        console.log("counterReducer", action);
-        switch (action.type) {
-          case "INC":
-            return { counter: state.counter + action.by };
-          case "DEC":
-            return { counter: state.counter - action.by };
-          default:
-            return state;
-        }
-      }
-
-      function utilReducer(
-        state = { time: new Date().toTimeString(), number: Math.random() },
+      function productReducer(
+        state = { products: [], isLoading: false },
         action
       ) {
-        console.log("utilReducer", action);
         switch (action.type) {
-          case "GET_TIME":
-            return {
-              ...state,
-              time: new Date().toTimeString()
-            };
-          case "GET_NUMER":
-            return {
-              ...state,
-              number: Math.random()
-            };
+          case "GET_PRODUCTS":
+            return { ...state, isLoading: true };
+          case "GET_PRODUCTS_SUCCESS":
+            return { ...state, products: action.products, isLoading: false };
           default:
             return state;
         }
       }
 
       const rootReducer = Redux.combineReducers({
-        counterState: counterReducer,
-        utilState: utilReducer
+        productState: productReducer
       });
 
-      const store = Redux.createStore(rootReducer);
+      const store = Redux.createStore(
+        rootReducer,
+        Redux.applyMiddleware(ReduxThunk.default)
+      );
       store.subscribe(() => console.log(store.getState()));
-      store.subscribe(() => {
-        document.querySelector(
-          "#res"
-        ).innerText = store.getState().counterState.counter;
-      });
     </script>
   </body>
 </html>
