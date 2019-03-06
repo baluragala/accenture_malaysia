@@ -17,7 +17,7 @@ class Item extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate");
+    console.log("componentDidUpdate test");
   }
 
   componentWillUnmount() {
@@ -34,7 +34,7 @@ class Item extends React.PureComponent {
       <div>
         <h3>
           <Link to={`/products/${id}`}>
-            {title}({stock})
+            {title.toUpperCase()}({stock})
           </Link>
         </h3>
         <p>{price}</p>
