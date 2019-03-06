@@ -23,18 +23,20 @@ class List extends React.Component {
   }
 
   _renderProdcts() {
-    return this.props.products.map(
-      p =>
-        p.stock > 0 && (
-          <Item key={p.id} product={p} onSell={this.handleOnSell} />
-        )
-    );
+    return this.props.products
+      .toJS()
+      .map(
+        p =>
+          p.stock > 0 && (
+            <Item key={p.id} product={p} onSell={this.handleOnSell} />
+          )
+      );
   }
   render() {
     return (
       <div>
         <h2>Products</h2>
-        {this.props.isLoading ? <p>Loading...</p> : this._renderProdcts()}
+        {this.s.isLoading ? <p>Loading...</p> : this._renderProdcts()}
       </div>
     );
   }
@@ -42,8 +44,8 @@ class List extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    products: state.productState.products,
-    isLoading: state.productState.isLoading
+    products: state.productState.get("products"),
+    isLoading: state.productState.get("isLoading")
   };
 }
 

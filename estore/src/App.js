@@ -9,6 +9,7 @@ import { Route, Switch } from "react-router-dom";
 import Nav from "./components/Nav";
 import Detail from "./components/Detail";
 import NoMatch from "./components/NoMatch";
+import TryCatch from "./components/TryCatch";
 
 class App extends Component {
   render() {
@@ -17,7 +18,9 @@ class App extends Component {
         <Header />
         <Nav />
         <Switch>
-          <Route exact path="/products" component={List} />
+          <TryCatch>
+            <Route exact path="/products" component={List} />
+          </TryCatch>
           <Route path="/products/new" component={AddProduct} />
           <Route path="/products/:productId" component={Detail} />
           <Route render={props => <NoMatch {...props} test="1" />} />

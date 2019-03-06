@@ -6,11 +6,14 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
+import TryCatch from "./components/TryCatch";
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <TryCatch>
+        <App />
+      </TryCatch>
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")
