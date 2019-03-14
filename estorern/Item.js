@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Alert } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 class Item extends React.Component {
   render() {
-    let { title, addintionalInfo, price, rating } = this.props.product;
+    let { title, addintionalInfo, price, rating, id } = this.props.product;
     return (
       <View style={{ height: 175 }}>
         <View style={[styles.container]}>
@@ -13,7 +13,9 @@ class Item extends React.Component {
             source={{ uri: "https://dummyimage.com/100X150/000/fff" }}
           />
           <View style={[styles.infoContainer]}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>
+              {id}.{title}
+            </Text>
             <Text style={styles.addintionalInfo}>{addintionalInfo}</Text>
             <View style={[styles.ratingContainer]}>
               <Text>{rating}</Text>
@@ -21,7 +23,27 @@ class Item extends React.Component {
             </View>
             <Text style={styles.price}>{price}</Text>
           </View>
-          <FontAwesome name="heart-o" size={32} color="green" />
+          <FontAwesome
+            name="heart-o"
+            size={32}
+            color="green"
+            onPress={() => {
+              Alert.alert("Favorite", "Would like to set this as favorite", [
+                {
+                  text: "Ok",
+                  onPress: () => {
+                    console.log("Ok");
+                  }
+                },
+                {
+                  text: "Cancel",
+                  onPress: () => {
+                    console.log("Cancel");
+                  }
+                }
+              ]);
+            }}
+          />
         </View>
       </View>
     );
@@ -33,12 +55,11 @@ export default Item;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "yellow",
-    borderWidth: 1,
-    borderColor: "black",
     flexDirection: "row",
     padding: 10,
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    borderColor: "grey",
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   image: {
     width: 100,
@@ -46,9 +67,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 8,
-    backgroundColor: "lightblue",
-    borderWidth: 1,
-    borderColor: "black",
+
     marginLeft: 10,
     marginRight: 10,
     padding: 5
@@ -59,13 +78,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   ratingContainer: {
-    backgroundColor: "green",
     flexDirection: "row",
     color: "white",
     borderWidth: 1,
     borderColor: "black",
     width: 40,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "lightgreen"
   }
 });
